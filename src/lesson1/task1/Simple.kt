@@ -50,7 +50,7 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
  */
 fun main() {
     val x1x2 = quadraticRootProduct(1.0, 13.0, 42.0)
-    println("Root product1337228: $x1x2")
+    println("Root product: $x1x2")
 }
 
 /**
@@ -60,7 +60,6 @@ fun main() {
  * Рассчитать время в секундах, прошедшее с начала суток (30035 в данном случае).
  */
 fun seconds(hours: Int, minutes: Int, seconds: Int): Int = TODO()
-
 
 /**
  * Тривиальная
