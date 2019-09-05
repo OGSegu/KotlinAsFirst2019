@@ -50,7 +50,7 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
  */
 fun main() {
     val x1x2 = quadraticRootProduct(1.0, 13.0, 42.0)
-    println("Root product1337: $x1x2")
+    println("Root product1337228: $x1x2")
 }
 
 /**
