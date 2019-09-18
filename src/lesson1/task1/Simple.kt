@@ -89,7 +89,6 @@ fun angleInRadian(deg: Int, min: Int, sec: Int): Double =
     (deg + (min * 0.0166667) + (sec * 0.000277778)) * 0.0174533
 
 
-
 /**
  * Тривиальная
  *
@@ -141,6 +140,6 @@ fun numberRevert(number: Int): Int {
     val b = value % 10
     value /= 10
     val c = value % 10
-    return (100*a + 10 * b + c)
+    return (100 * a + 10 * b + c)
 }
 

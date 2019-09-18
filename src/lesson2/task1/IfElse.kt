@@ -68,19 +68,16 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     var tempage = age
-    if (tempage > 100)
-    {
+    if (tempage > 100) {
         tempage -= 100
     }
-    return if (tempage != 11 && tempage != 12 && tempage != 13)
-    {
+    return if (tempage != 11 && tempage != 12 && tempage != 13) {
         when (age % 10) {
             1 -> "$age год"
             2, 3, 4, 5 -> "$age года"
             else -> "$age лет"
         }
-    }
-    else "$age лет"
+    } else "$age лет"
 }
 
 /**
@@ -98,17 +95,16 @@ fun timeForHalfWay(
     val s1 = t1 * v1
     val s2 = t2 * v2
     val s3 = t3 * v3
-    val length = s1 +s2 +s3
+    val length = s1 + s2 + s3
     val half = length / 2
 
     if (s1 > half) return (half / v1)
     else if ((s1 + s2) > half) {
         val cut = half - s1
         return ((cut / v2) + t1)
-    }
-    else {
+    } else {
         val cut2 = half - s1 - s2
-        return ((cut2/v3) + t1 + t2)
+        return ((cut2 / v3) + t1 + t2)
     }
 
 }
@@ -127,7 +123,7 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
-    return if ( (kingX - rookX1 == 0 || kingY - rookY1 == 0) && (kingX - rookX2 == 0 || kingY - rookY2 == 0)) 3
+    return if ((kingX - rookX1 == 0 || kingY - rookY1 == 0) && (kingX - rookX2 == 0 || kingY - rookY2 == 0)) 3
     else if (kingX - rookX1 == 0 || kingY - rookY1 == 0) 1
     else if (kingX - rookX2 == 0 || kingY - rookY2 == 0) 2
     else 0
@@ -168,7 +164,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     var angleC = Math.toDegrees(acos((b.pow(2) + c.pow(2) - a.pow(2)) / (2 * c * b)))
     return if (angleA in 0..89 && angleB in 0..89 && angleC in 0..89) 0
     else if (angleA == 90.0 || angleB == 90.0 || angleC == 90.0) 1
-    else if (angleA in 91..180 || angleB in 91..180 || angleC in 91..180  ) 2
+    else if (angleA in 91..180 || angleB in 91..180 || angleC in 91..180) 2
     else -1
 }
 
@@ -184,12 +180,17 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     if ((d < a) || (b < c)) return -1
     return if (a < c) {
-        if (b <= d) (b - c)
-        else (d - c)
-    }
-    else {
-        if (b <= d ) (b - a)
-        else (d - a)
+        if (b <= d) {
+            b - c
+        } else {
+            d - c
+        }
+    } else {
+        if (b <= d) {
+            b - a
+        } else {
+            d - a
+        }
     }
 
 }
