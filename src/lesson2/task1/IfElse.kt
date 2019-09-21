@@ -74,7 +74,7 @@ fun ageDescription(age: Int): String {
     return if (tempage != 11 && tempage != 12 && tempage != 13) {
         when (age % 10) {
             1 -> "$age год"
-            2, 3, 4, 5 -> "$age года"
+            2, 3, 4 -> "$age года"
             else -> "$age лет"
         }
     } else "$age лет"
@@ -144,8 +144,8 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    return if (((kingX + kingY == bishopX + bishopY) || (abs(kingX - kingY) == abs(bishopX - bishopY))) && (((kingX - rookX == 0) || (kingY - rookY) == 0))) 3
-    else if ((kingX + kingY == bishopX + bishopY) || (abs(kingX - kingY) == abs(bishopX - bishopY))) 2
+    return if (((abs(kingX - kingY) == abs(bishopX - bishopY))) && (((kingX - rookX == 0) || (kingY - rookY) == 0))) 3
+    else if (abs(kingX - kingY) == abs(bishopX - bishopY)) 2
     else if ((kingX - rookX == 0) || (kingY - rookY) == 0) 1
     else 0
 }
@@ -162,7 +162,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val angleA = Math.toDegrees(acos((a.pow(2) + c.pow(2) - b.pow(2)) / (2 * a * c)))
     val angleB = Math.toDegrees(acos((a.pow(2) + b.pow(2) - c.pow(2)) / (2 * a * b)))
     val angleC = Math.toDegrees(acos((b.pow(2) + c.pow(2) - a.pow(2)) / (2 * c * b)))
-    return if (angleA in 1.0..89.0 && angleB in 1.0..89.0 && angleC in 1.0..89.0) 0
+    return if (angleA in 0.0..89.0 && angleB in 0.0..89.0 && angleC in 0.0..89.0) 0
     else if (angleA == 90.0 || angleB == 90.0 || angleC == 90.0) 1
     else if (angleA in 91.0..180.0 || angleB in 91.0..180.0 || angleC in 91.0..180.0) 2
     else -1
