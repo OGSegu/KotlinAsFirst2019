@@ -144,8 +144,8 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    return if ((((kingX + kingY) == (bishopX + bishopY)) || (abs(kingX - kingY) == abs(bishopX - bishopY))) && (((kingX - rookX == 0) || (kingY - rookY) == 0))) 3
-    else if (((kingX + kingY) == (bishopX + bishopY)) || (abs(kingX - kingY) == abs(bishopX - bishopY))) 2
+    return if ((((kingX + kingY) == (bishopX + bishopY)) || ((kingX - kingY) == (bishopX - bishopY))) && (((kingX - rookX == 0) || (kingY - rookY) == 0))) 3
+    else if (((kingX + kingY) == (bishopX + bishopY)) || ((kingX - kingY) == (bishopX - bishopY))) 2
     else if ((kingX - rookX == 0) || (kingY - rookY) == 0) 1
     else 0
 }
