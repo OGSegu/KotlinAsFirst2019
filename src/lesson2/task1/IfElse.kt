@@ -71,7 +71,7 @@ fun ageDescription(age: Int): String {
     if (tempage > 100) {
         tempage -= 100
     }
-    return if (tempage != 11 && tempage != 12 && tempage != 13) {
+    return if (tempage != 11 && tempage != 12 && tempage != 13 && tempage != 14) {
         when (age % 10) {
             1 -> "$age год"
             2, 3, 4 -> "$age года"
@@ -144,8 +144,8 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    return if (((abs(kingX - kingY) == abs(bishopX - bishopY))) && (((kingX - rookX == 0) || (kingY - rookY) == 0))) 3
-    else if (abs(kingX - kingY) == abs(bishopX - bishopY)) 2
+    return if ((((kingX + kingY) == (bishopX + bishopY)) || (abs(kingX - kingY) == abs(bishopX - bishopY))) && (((kingX - rookX == 0) || (kingY - rookY) == 0))) 3
+    else if (((kingX + kingY) == (bishopX + bishopY)) || (abs(kingX - kingY) == abs(bishopX - bishopY))) 2
     else if ((kingX - rookX == 0) || (kingY - rookY) == 0) 1
     else 0
 }
