@@ -162,10 +162,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val angleA = Math.toDegrees(acos((a.pow(2) + c.pow(2) - b.pow(2)) / (2 * a * c)))
     val angleB = Math.toDegrees(acos((a.pow(2) + b.pow(2) - c.pow(2)) / (2 * a * b)))
     val angleC = Math.toDegrees(acos((b.pow(2) + c.pow(2) - a.pow(2)) / (2 * c * b)))
-    return if (angleA in 0.0..89.0 && angleB in 0.0..89.0 && angleC in 0.0..89.0) 0
-    else if (angleA == 90.0 || angleB == 90.0 || angleC == 90.0) 1
-    else if (angleA in 91.0..180.0 || angleB in 91.0..180.0 || angleC in 91.0..180.0) 2
-    else -1
+    return when {
+        (angleA > 0 && angleA < 90) && (angleB > 0 && angleB < 90) && (angleC > 0 && angleC < 90) -> 0
+        angleA == 90.0 || angleB == 90.0 || angleC == 90.0 -> 1
+        (angleA > 90 && angleA < 180) || (angleB > 90 && angleB < 180) || (angleC > 90 && angleC < 180) -> 2
+        else -> -1
+    }
 }
 
 
