@@ -122,12 +122,12 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int {
-    return if ((kingX - rookX1 == 0 || kingY - rookY1 == 0) && (kingX - rookX2 == 0 || kingY - rookY2 == 0)) 3
+): Int =
+    if ((kingX - rookX1 == 0 || kingY - rookY1 == 0) && (kingX - rookX2 == 0 || kingY - rookY2 == 0)) 3
     else if (kingX - rookX1 == 0 || kingY - rookY1 == 0) 1
     else if (kingX - rookX2 == 0 || kingY - rookY2 == 0) 2
     else 0
-}
+
 
 /**
  * Простая
@@ -143,12 +143,12 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int {
-    return if ((((kingX + kingY) == (bishopX + bishopY)) || ((kingX - kingY) == (bishopX - bishopY))) && (((kingX - rookX == 0) || (kingY - rookY) == 0))) 3
+): Int =
+    if ((((kingX + kingY) == (bishopX + bishopY)) || ((kingX - kingY) == (bishopX - bishopY))) && (((kingX - rookX == 0) || (kingY - rookY) == 0))) 3
     else if (((kingX + kingY) == (bishopX + bishopY)) || ((kingX - kingY) == (bishopX - bishopY))) 2
     else if ((kingX - rookX == 0) || (kingY - rookY) == 0) 1
     else 0
-}
+
 
 /**
  * Простая
