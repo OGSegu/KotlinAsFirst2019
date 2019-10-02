@@ -3,6 +3,7 @@
 package lesson3.task1
 
 import kotlin.math.sqrt
+import kotlin.math.pow
 
 /**
  * Пример
@@ -67,7 +68,15 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var number = n
+    var counter = 1
+    while (number / 10 != 0) {
+        number /= 10
+        counter++
+    }
+    return counter
+}
 
 /**
  * Простая
@@ -75,7 +84,19 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    var previous = 0
+    var current = 1
+    var next: Int
+    var i = 1
+    while (n > i) {
+        next = current + previous
+        previous = current
+        current = next
+        i++
+    }
+    return current
+}
 
 /**
  * Простая
@@ -196,7 +217,32 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var number = 1
+    var i = 1
+    var squareNumber = 1
+    var temp: Int
+    var amountNumbers: Int
+    while (n > i) {
+        number++
+        amountNumbers = 0
+        squareNumber = number.toDouble().pow(2).toInt()
+        temp = squareNumber
+        if (temp > 9) {
+            while (temp != 0) {
+                temp /= 10
+                amountNumbers++
+            }
+            i += amountNumbers
+        } else i++
+    }
+    if (n == i) return (squareNumber % 10)
+    else for (z in 1..(i - n)) {
+        squareNumber /= 10
+    }
+    return squareNumber % 10
+}
+
 
 /**
  * Сложная
@@ -207,4 +253,30 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var previous = 0
+    var current = 1
+    var next: Int
+    var temp: Int
+    var amountNumbers: Int
+    var i = 1
+    while (n > i) {
+        amountNumbers = 0
+        next = current + previous
+        previous = current
+        current = next
+        temp = current
+        if (temp > 9) {
+            while (temp != 0) {
+                temp /= 10
+                amountNumbers++
+            }
+            i += amountNumbers
+        } else i++
+    }
+    if (n == i) return (current % 10)
+    else for (z in 1..(i - n)) {
+        current /= 10
+    }
+    return current % 10
+}
