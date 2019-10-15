@@ -221,23 +221,16 @@ fun squareSequenceDigit(n: Int): Int {
     var number = 1
     var i = 1
     var squareNumber = 1
-    var temp: Int
     var amountNumbers: Int
     while (n > i) {
         number++
-        amountNumbers = 0
         squareNumber = number.toDouble().pow(2).toInt()
-        temp = squareNumber
-        if (temp > 9) {
-            while (temp != 0) {
-                temp /= 10
-                amountNumbers++
-            }
+        if (squareNumber > 9) {
+            amountNumbers = digitNumber(squareNumber)
             i += amountNumbers
         } else i++
     }
-    if (n == i) return (squareNumber % 10)
-    else for (z in 1..(i - n)) {
+    for (z in 1..(i - n)) {
         squareNumber /= 10
     }
     return squareNumber % 10
@@ -257,25 +250,18 @@ fun fibSequenceDigit(n: Int): Int {
     var previous = 0
     var current = 1
     var next: Int
-    var temp: Int
     var amountNumbers: Int
     var i = 1
     while (n > i) {
-        amountNumbers = 0
         next = current + previous
         previous = current
         current = next
-        temp = current
-        if (temp > 9) {
-            while (temp != 0) {
-                temp /= 10
-                amountNumbers++
-            }
+        if (current > 9) {
+            amountNumbers = digitNumber(current)
             i += amountNumbers
         } else i++
     }
-    if (n == i) return (current % 10)
-    else for (z in 1..(i - n)) {
+    for (z in 1..(i - n)) {
         current /= 10
     }
     return current % 10

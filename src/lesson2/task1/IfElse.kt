@@ -5,7 +5,6 @@ package lesson2.task1
 
 import lesson1.task1.discriminant
 import kotlin.math.*
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -69,9 +68,9 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
 fun ageDescription(age: Int): String {
     var tempage = age
     if (tempage > 100) {
-        tempage -= 100
+        tempage %= 100
     }
-    return if (tempage != 11 && tempage != 12 && tempage != 13 && tempage != 14) {
+    return if (tempage !in 11..14) {
         when (age % 10) {
             1 -> "$age год"
             2, 3, 4 -> "$age года"
@@ -98,13 +97,16 @@ fun timeForHalfWay(
     val length = s1 + s2 + s3
     val half = length / 2
 
-    return if (s1 > half) (half / v1)
-    else if ((s1 + s2) > half) {
-        val cut = half - s1
-        ((cut / v2) + t1)
-    } else {
-        val cut2 = half - s1 - s2
-        ((cut2 / v3) + t1 + t2)
+    return when {
+        s1 > half -> half / v1
+        (s1 + s2) > half -> {
+            val cut = half - s1
+            ((cut / v2) + t1)
+        }
+        else -> {
+            val cut2 = half - s1 - s2
+            ((cut2 / v3) + t1 + t2)
+        }
     }
 
 }
@@ -122,11 +124,16 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int =
-    if ((kingX - rookX1 == 0 || kingY - rookY1 == 0) && (kingX - rookX2 == 0 || kingY - rookY2 == 0)) 3
-    else if (kingX - rookX1 == 0 || kingY - rookY1 == 0) 1
-    else if (kingX - rookX2 == 0 || kingY - rookY2 == 0) 2
+): Int {
+    val kingRookX1 = kingX - rookX1
+    val kingRookY1 = kingY - rookY1
+    val kingRookX2= kingX - rookX2
+    val kingRookY2 = kingY - rookY2
+    return if ((kingRookX1 == 0 || kingRookY1 == 0) && (kingRookX2 == 0 || kingRookY2 == 0)) 3
+    else if (kingRookX1 == 0 || kingRookY1 == 0) 1
+    else if (kingRookX2 == 0 || kingRookY2 == 0) 2
     else 0
+}
 
 
 /**
@@ -143,11 +150,19 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int =
-    if ((((kingX + kingY) == (bishopX + bishopY)) || ((kingX - kingY) == (bishopX - bishopY))) && (((kingX - rookX == 0) || (kingY - rookY) == 0))) 3
-    else if (((kingX + kingY) == (bishopX + bishopY)) || ((kingX - kingY) == (bishopX - bishopY))) 2
-    else if ((kingX - rookX == 0) || (kingY - rookY) == 0) 1
+): Int {
+    val kingXYplus = kingX + kingY
+    val kingXYminus = kingX - kingY
+    val bishopXYplus = bishopX + bishopY
+    val bishopXYminus = bishopX - bishopY
+    val kingRookX = kingX - rookX
+    val kingRookY = kingY - rookY
+
+    return if ((((kingXYplus) == (bishopXYplus)) || ((kingXYminus) == (bishopXYminus))) && (((kingRookX == 0) || kingRookY == 0))) 3
+    else if (((kingXYplus) == (bishopXYplus)) || ((kingXYminus) == (bishopXYminus))) 2
+    else if ((kingRookX == 0) || kingRookY == 0) 1
     else 0
+}
 
 
 /**

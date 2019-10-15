@@ -44,7 +44,7 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    val visYear = when {
+    val neededYear = when {
         year % 400 == 0 -> true
         year % 100 == 0 -> false
         year % 4 == 0 -> true
@@ -52,7 +52,7 @@ fun daysInMonth(month: Int, year: Int): Int {
     }
     return when (month) {
         1, 3, 5, 7, 8, 10, 12 -> 31
-        2 -> if (visYear) 29 else 28
+        2 -> if (neededYear) 29 else 28
         else -> 30
     }
 
@@ -69,10 +69,7 @@ fun daysInMonth(month: Int, year: Int): Int {
 fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
-): Boolean {
-    val lengthCenter = sqrt(abs((y1 - y2).pow(2) + (x1 - x2).pow(2)))
-    return lengthCenter <= (r2 - r1)
-}
+): Boolean = (sqrt(abs((y1 - y2).pow(2) + (x1 - x2).pow(2))) <= (r2 - r1))
 
 /**
  * Средняя
