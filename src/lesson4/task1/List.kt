@@ -116,7 +116,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = sqrt((v.map {it * it}).sum())
+fun abs(v: List<Double>): Double = sqrt((v.map { it * it }).sum())
 
 /**
  * Простая
@@ -126,8 +126,7 @@ fun abs(v: List<Double>): Double = sqrt((v.map {it * it}).sum())
 fun mean(list: List<Double>): Double {
     return if (list.isNotEmpty()) {
         list.sum() / list.size
-    }
-    else 0.0
+    } else 0.0
 }
 
 /**
@@ -141,8 +140,7 @@ fun mean(list: List<Double>): Double {
 fun center(list: MutableList<Double>): MutableList<Double> {
     val list = list
     val average = mean(list)
-    for (i in 0 until list.size)
-    {
+    for (i in 0 until list.size) {
         list[i] -= average
     }
     return list
@@ -157,8 +155,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  */
 fun times(a: List<Int>, b: List<Int>): Int {
     var c = 0
-    for(i in a.indices)
-    {
+    for (i in a.indices) {
         c += a[i] * b[i]
     }
     return c
@@ -175,8 +172,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
 fun polynom(p: List<Int>, x: Int): Int {
     if (p.isEmpty()) return 0
     var result = p[0]
-    for (i in 1 until p.size)
-    {
+    for (i in 1 until p.size) {
         result += p[i] * x.toDouble().pow(i).toInt()
     }
     return result
@@ -195,9 +191,8 @@ fun polynom(p: List<Int>, x: Int): Int {
 fun accumulate(list: MutableList<Int>): MutableList<Int> { //начинать с конца
     val list = list
     if (list.isEmpty()) return list
-    for (i in list.size-1 downTo 1)
-    {
-        for (k in i-1 downTo 0) list[i] += list[k]
+    for (i in list.size - 1 downTo 1) {
+        for (k in i - 1 downTo 0) list[i] += list[k]
     }
     return list
 }
@@ -245,12 +240,12 @@ fun convert(n: Int, base: Int): List<Int> {
     val list = mutableListOf<Int>()
     var number = n
     if (base > number) return listOf(number)
-        while (number > base) {
-            element = number - ((number / base) * base)
-            number /= base
-            list.add(0, element)
-            if (number < base) list.add(0 , number)
-        }
+    while (number >= base) {
+        element = number - ((number / base) * base)
+        number /= base
+        list.add(0, element)
+        if (number < base) list.add(0, number)
+    }
     return list.toList()
 }
 

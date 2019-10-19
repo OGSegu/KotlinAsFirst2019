@@ -127,7 +127,7 @@ fun whichRookThreatens(
 ): Int {
     val kingRookX1 = kingX - rookX1
     val kingRookY1 = kingY - rookY1
-    val kingRookX2= kingX - rookX2
+    val kingRookX2 = kingX - rookX2
     val kingRookY2 = kingY - rookY2
     return if ((kingRookX1 == 0 || kingRookY1 == 0) && (kingRookX2 == 0 || kingRookY2 == 0)) 3
     else if (kingRookX1 == 0 || kingRookY1 == 0) 1
@@ -177,15 +177,14 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val angleA = Math.toDegrees(acos((a.pow(2) + c.pow(2) - b.pow(2)) / (2 * a * c)))
     val angleB = Math.toDegrees(acos((a.pow(2) + b.pow(2) - c.pow(2)) / (2 * a * b)))
     val angleC = Math.toDegrees(acos((b.pow(2) + c.pow(2) - a.pow(2)) / (2 * c * b)))
-    if (angleA + angleB + angleC != 180.0) return -1
+    if (floor(angleA + angleB + angleC) != 180.0) return -1
     return when {
-        (angleA > 0 && angleA < 90) && (angleB > 0 && angleB < 90) && (angleC > 0 && angleC < 90) -> 0
+        (angleA > 0.0 && angleA < 90.0) && (angleB > 0.0 && angleB < 90.0) && (angleC > 0.0 && angleC < 90.0) -> 0
         angleA == 90.0 || angleB == 90.0 || angleC == 90.0 -> 1
-        (angleA > 90 && angleA < 180) || (angleB > 90 && angleB < 180) || (angleC > 90 && angleC < 180) -> 2
+        (angleA > 90.0 && angleA < 180.0) || (angleB > 90.0 && angleB < 180.0) || (angleC > 90.0 && angleC < 180.0) -> 2
         else -> -1
     }
 }
-
 
 /**
  * Средняя
@@ -197,5 +196,5 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     return if ((d < a) || (b < c)) -1
-    else min(b,d) - max(a,c)
+    else min(b, d) - max(a, c)
 }
