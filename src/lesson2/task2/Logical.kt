@@ -81,24 +81,13 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    if (a <= r) {
-        if (b <= s || c <= s) return true
-    }
-    if (a <= s) {
-        if (b <= r || c <= r) return true
-    }
-    if (b <= r) {
-        if (a <= s || c <= s) return true
-    }
-    if (b <= s) {
-        if (a <= r || c <= r) return true
-    }
-    if (c <= r) {
-        if (a <= s || b <= s) return true
-    }
-    if (c <= s) {
-        if (a <= r || b <= r) return true
-    }
+    val averageLength = if (a > b && a < c || a < b && a > c) // Если исправить, выходит очень странная конструкция
+        a
+    else if (b > a && b < c || b < a && b > c) // Тут тоже самое
+        b
+    else c
+
+    if ((minOf(a, b, c) <= minOf(r, s)) && (averageLength <= maxOf(r, s))) return true
     return false
 }
 

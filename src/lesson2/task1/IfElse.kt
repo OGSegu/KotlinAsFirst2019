@@ -177,6 +177,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val angleA = Math.toDegrees(acos((a.pow(2) + c.pow(2) - b.pow(2)) / (2 * a * c)))
     val angleB = Math.toDegrees(acos((a.pow(2) + b.pow(2) - c.pow(2)) / (2 * a * b)))
     val angleC = Math.toDegrees(acos((b.pow(2) + c.pow(2) - a.pow(2)) / (2 * c * b)))
+    if (angleA + angleB + angleC != 180.0) return -1
     return when {
         (angleA > 0 && angleA < 90) && (angleB > 0 && angleB < 90) && (angleC > 0 && angleC < 90) -> 0
         angleA == 90.0 || angleB == 90.0 || angleC == 90.0 -> 1
@@ -195,19 +196,6 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if ((d < a) || (b < c)) return -1
-    return if (a < c) {
-        if (b <= d) {
-            b - c
-        } else {
-            d - c
-        }
-    } else {
-        if (b <= d) {
-            b - a
-        } else {
-            d - a
-        }
-    }
-
+    return if ((d < a) || (b < c)) -1
+    else min(b,d) - max(a,c)
 }
