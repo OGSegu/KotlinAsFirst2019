@@ -174,10 +174,11 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
+    if (a == b && b == c) return 0
     val angleA = Math.toDegrees(acos((a.pow(2) + c.pow(2) - b.pow(2)) / (2 * a * c)))
     val angleB = Math.toDegrees(acos((a.pow(2) + b.pow(2) - c.pow(2)) / (2 * a * b)))
     val angleC = Math.toDegrees(acos((b.pow(2) + c.pow(2) - a.pow(2)) / (2 * c * b)))
-    if (floor(angleA + angleB + angleC) != 180.0) return -1
+    if ((angleA + angleB + angleC) != 180.0) return -1
     return when {
         (angleA > 0.0 && angleA < 90.0) && (angleB > 0.0 && angleB < 90.0) && (angleC > 0.0 && angleC < 90.0) -> 0
         angleA == 90.0 || angleB == 90.0 || angleC == 90.0 -> 1
