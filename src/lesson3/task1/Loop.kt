@@ -185,7 +185,18 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var number = n
+    var tempnumber = 0
+    var digit: Int
+    while (number > 0) {
+       digit = number % 10
+       number /= 10
+       tempnumber *= 10
+       tempnumber += digit
+    }
+    return tempnumber
+}
 
 /**
  * Средняя
@@ -221,14 +232,10 @@ fun squareSequenceDigit(n: Int): Int {
     var number = 1
     var i = 1
     var squareNumber = 1
-    var amountNumbers: Int
     while (n > i) {
         number++
         squareNumber = number.toDouble().pow(2).toInt()
-        if (squareNumber > 9) {
-            amountNumbers = digitNumber(squareNumber)
-            i += amountNumbers
-        } else i++
+        i += digitNumber(squareNumber)
     }
     for (z in 1..(i - n)) {
         squareNumber /= 10

@@ -129,10 +129,12 @@ fun whichRookThreatens(
     val kingRookY1 = kingY - rookY1
     val kingRookX2 = kingX - rookX2
     val kingRookY2 = kingY - rookY2
-    return if ((kingRookX1 == 0 || kingRookY1 == 0) && (kingRookX2 == 0 || kingRookY2 == 0)) 3
-    else if (kingRookX1 == 0 || kingRookY1 == 0) 1
-    else if (kingRookX2 == 0 || kingRookY2 == 0) 2
-    else 0
+    return when {
+        ((kingRookX1 == 0 || kingRookY1 == 0) && (kingRookX2 == 0 || kingRookY2 == 0)) -> 3
+        (kingRookX1 == 0 || kingRookY1 == 0) -> 1
+        (kingRookX2 == 0 || kingRookY2 == 0) -> 2
+        else -> 0
+    }
 }
 
 
@@ -158,10 +160,12 @@ fun rookOrBishopThreatens(
     val kingRookX = kingX - rookX
     val kingRookY = kingY - rookY
 
-    return if ((((kingXYplus) == (bishopXYplus)) || ((kingXYminus) == (bishopXYminus))) && (((kingRookX == 0) || kingRookY == 0))) 3
-    else if (((kingXYplus) == (bishopXYplus)) || ((kingXYminus) == (bishopXYminus))) 2
-    else if ((kingRookX == 0) || kingRookY == 0) 1
-    else 0
+    return when {
+        ((((kingXYplus) == (bishopXYplus)) || ((kingXYminus) == (bishopXYminus))) && (((kingRookX == 0) || kingRookY == 0))) -> 3
+        (((kingXYplus) == (bishopXYplus)) || ((kingXYminus) == (bishopXYminus))) -> 2
+        ((kingRookX == 0) || kingRookY == 0) -> 1
+        else -> 0
+    }
 }
 
 
@@ -175,10 +179,10 @@ fun rookOrBishopThreatens(
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     if (a == b && b == c) return 0
+    if ((a + b < c) || (a + c < b) || (b + c < a)) return -1
     val angleA = Math.toDegrees(acos((a.pow(2) + c.pow(2) - b.pow(2)) / (2 * a * c)))
     val angleB = Math.toDegrees(acos((a.pow(2) + b.pow(2) - c.pow(2)) / (2 * a * b)))
     val angleC = Math.toDegrees(acos((b.pow(2) + c.pow(2) - a.pow(2)) / (2 * c * b)))
-    if (round((angleA + angleB + angleC)) != 180.0) return -1
     return when {
         (angleA > 0.0 && angleA < 90.0) && (angleB > 0.0 && angleB < 90.0) && (angleC > 0.0 && angleC < 90.0) -> 0
         angleA == 90.0 || angleB == 90.0 || angleC == 90.0 -> 1

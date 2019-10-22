@@ -172,8 +172,10 @@ fun times(a: List<Int>, b: List<Int>): Int {
 fun polynom(p: List<Int>, x: Int): Int {
     if (p.isEmpty()) return 0
     var result = p[0]
+    var power = 1
     for (i in 1 until p.size) {
-        result += p[i] * x.toDouble().pow(i).toInt()
+        result += p[i] * x.toDouble().pow(power).toInt()
+        power++
     }
     return result
 }
@@ -190,7 +192,6 @@ fun polynom(p: List<Int>, x: Int): Int {
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> { //начинать с конца
     val list = list
-    if (list.isEmpty()) return list
     for (i in list.size - 1 downTo 1) {
         for (k in i - 1 downTo 0) list[i] += list[k]
     }
@@ -246,7 +247,7 @@ fun convert(n: Int, base: Int): List<Int> {
         list.add(0, element)
         if (number < base) list.add(0, number)
     }
-    return list.toList()
+    return list
 }
 
 /**
@@ -260,7 +261,29 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO() //ascii
+fun convertToString(n: Int, base: Int): String {
+    var result = ""
+    var element: Int
+    var number = n
+    while (number >= base) {
+        element = number - ((number / base) * base)
+        number /= base
+        if (element in 10..37) result += toAsciiChar(element)
+        else result += element
+    }
+    if (base > number) {
+        when {
+            number >= 10 -> result += toAsciiChar(number)
+            else -> result += number
+        }
+    }
+    return result.reversed()
+}
+
+fun toAsciiChar(n: Int): Char {
+    val number = ((n + 87).toChar())
+    return number
+}
 
 /**
  * Средняя
@@ -269,7 +292,15 @@ fun convertToString(n: Int, base: Int): String = TODO() //ascii
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var result = 0
+    digits.sortedDescending()
+    for(i in digits.size - 1 downTo 0)
+    {
+        result += digits[i] * base.toDouble().pow(digits.size - 1 - i).toInt()
+    }
+    return result
+}
 
 /**
  * Сложная

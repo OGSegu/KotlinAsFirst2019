@@ -44,7 +44,7 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    val neededYear = when {
+    val isLeap = when {
         year % 400 == 0 -> true
         year % 100 == 0 -> false
         year % 4 == 0 -> true
@@ -52,7 +52,7 @@ fun daysInMonth(month: Int, year: Int): Int {
     }
     return when (month) {
         1, 3, 5, 7, 8, 10, 12 -> 31
-        2 -> if (neededYear) 29 else 28
+        2 -> if (isLeap) 29 else 28
         else -> 30
     }
 
@@ -81,9 +81,9 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val averageLength = if (a >= b && a <= c || a <= b && a >= c) // Если исправить, выходит очень странная конструкция
+    val averageLength = if (a in b..c || a in c..b) // Если исправить, выходит очень странная конструкция
         a
-    else if (b >= a && b <= c || b <= a && b >= c) // Тут тоже самое
+    else if (b in a..c || b in c..a) // Тут тоже самое
         b
     else c
 
