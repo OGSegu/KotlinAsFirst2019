@@ -138,7 +138,6 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    val list = list
     val average = mean(list)
     for (i in 0 until list.size) {
         list[i] -= average
@@ -170,12 +169,11 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    if (p.isEmpty()) return 0
-    var result = p[0]
-    var power = 1
-    for (i in 1 until p.size) {
-        result += p[i] * x.toDouble().pow(power).toInt()
-        power++
+    var result = 0
+    var varX = 1
+    for (element in p) {
+        result += element * varX
+        varX *= x
     }
     return result
 }
@@ -190,8 +188,7 @@ fun polynom(p: List<Int>, x: Int): Int {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> { //начинать с конца
-    val list = list
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
     for (i in list.size - 1 downTo 1) {
         for (k in i - 1 downTo 0) list[i] += list[k]
     }
@@ -217,7 +214,7 @@ fun factorize(n: Int): List<Int> {
         }
         i++
     }
-    return divideList.toList().sorted()
+    return divideList
 }
 
 /**
@@ -283,6 +280,10 @@ fun convertToString(n: Int, base: Int): String {
 fun toAsciiChar(n: Int): Char {
     val number = ((n + 87).toChar())
     return number
+}
+
+fun toAsciiInt(n: String): Int {
+    return (n.toInt() - 87)
 }
 
 /**

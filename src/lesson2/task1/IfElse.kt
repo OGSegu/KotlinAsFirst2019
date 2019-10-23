@@ -67,9 +67,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     var tempage = age
-    if (tempage > 100) {
-        tempage %= 100
-    }
+    tempage %= 100
     return if (tempage !in 11..14) {
         when (age % 10) {
             1 -> "$age год"
