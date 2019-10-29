@@ -190,10 +190,10 @@ fun revert(n: Int): Int {
     var tempnumber = 0
     var digit: Int
     while (number > 0) {
-       digit = number % 10
-       number /= 10
-       tempnumber *= 10
-       tempnumber += digit
+        digit = number % 10
+        number /= 10
+        tempnumber *= 10
+        tempnumber += digit
     }
     return tempnumber
 }

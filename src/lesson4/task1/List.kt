@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import java.io.File.separator
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -237,14 +238,13 @@ fun convert(n: Int, base: Int): List<Int> {
     var element: Int
     val list = mutableListOf<Int>()
     var number = n
-    if (base > number) return listOf(number)
     while (number >= base) {
         element = number - ((number / base) * base)
         number /= base
-        list.add(0, element)
-        if (number < base) list.add(0, number)
+        list.add(element)
     }
-    return list
+    list.add(number)
+    return list.reversed()
 }
 
 /**
@@ -259,32 +259,22 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    var result = ""
-    var element: Int
-    var number = n
-    while (number >= base) {
-        element = number - ((number / base) * base)
-        number /= base
-        if (element in 10..37) result += toAsciiChar(element)
-        else result += element
-    }
-    if (base > number) {
-        when {
-            number >= 10 -> result += toAsciiChar(number)
-            else -> result += number
+    val result = mutableListOf<String>()
+    val list = convert(n,base)
+    for (i in list.indices)
+    {
+        if (list[i] in 10..36)
+        {
+            result.add(toAsciiChar(list[i]).toString())
+            continue
         }
+        result.add(list[i].toString())
     }
-    return result.reversed()
+    return result.joinToString(separator = "")
 }
 
-fun toAsciiChar(n: Int): Char {
-    val number = ((n + 87).toChar())
-    return number
-}
+fun toAsciiChar(n: Int): Char = (n + 87).toChar()
 
-fun toAsciiInt(n: String): Int {
-    return (n.toInt() - 87)
-}
 
 /**
  * Средняя
@@ -295,10 +285,10 @@ fun toAsciiInt(n: String): Int {
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var result = 0
-    digits.sortedDescending()
-    for(i in digits.size - 1 downTo 0)
-    {
-        result += digits[i] * base.toDouble().pow(digits.size - 1 - i).toInt()
+    var varX = 0
+    for (i in digits.size - 1 downTo 0) {
+        result += digits[i] * base.toDouble().pow(varX).toInt()
+        varX += 1
     }
     return result
 }
@@ -315,7 +305,19 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var result = 0
+    for (i in str.length - 1 downTo 0) {
+        result += when (str[i]) {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> (str[i].toInt() - 48) * base.toDouble().pow(str.length - 1 - i).toInt()
+            else -> toAsciiInt(str[i]) * base.toDouble().pow(str.length - 1 - i).toInt()
+        }
+
+    }
+    return result
+}
+
+fun toAsciiInt(n: Char): Int = (n.toInt() - 87)
 
 /**
  * Сложная
@@ -325,7 +327,20 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val arabicList = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val romanList = listOf("M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I")
+    val result = mutableListOf<String>()
+    var number = n
+        for (i in arabicList.indices)
+        {
+            while (number >= arabicList[i]) {
+                    number -= arabicList[i]
+                    result.add (romanList[i])
+            }
+        }
+    return result.joinToString(separator = "")
+}
 
 /**
  * Очень сложная
@@ -334,4 +349,130 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+
+// Скорее всего пропущу это задание, так как не успеваю до дедлайна. (оно не рабочее)
+
+fun russian(n: Int): String {
+    var number = n
+    var tempNumber: Int
+    var count = digitNumber(number)
+    val list = mutableListOf<String>()
+    val power = 10.0
+    while(count != 1)
+    {
+        count = digitNumber(number)
+        tempNumber = number / power.pow(count - 1).toInt()
+        list.add(transform(tempNumber, count, list))
+        number %= power.pow(count-1).toInt()
+    }
+    return list.joinToString(separator = " ")
+}
+
+fun transform(n: Int, count: Int, list: MutableList<String>): String { // Единицы
+    if ((count == 6) || (count == 3)) {
+        return when (n) {
+            1 -> "сто"
+            2 -> "двести"
+            3 -> "триста"
+            4 -> "четыреста"
+            5 -> "пятьсот"
+            6 -> "шестьсот"
+            7 -> "семьсот"
+            8 -> "восемьсот"
+            9 -> "девятьсот"
+            else -> ""
+        }
+    }
+    if ((count == 5) || (count == 2)) {
+        return when (n) {
+            1 -> "десять"
+            2 -> "двадцать"
+            3 -> "тридцать"
+            4 -> "сорок"
+            5 -> "пятьдесят"
+            6 -> "шестьдесят"
+            7 -> "семьдесят"
+            8 -> "восемьдесят"
+            9 -> "девяносто"
+            else -> ""
+        }
+    }
+    if (count == 4) {
+        if (list.last() == "десять") return exceptionThousands(n, list)
+        return when (n)
+        {
+            1 -> "одна тысяча"
+            2 -> "две тысячи"
+            3 -> "три тысячи"
+            4 -> "четыре тысячи"
+            5 -> "пять тысяч"
+            6 -> "шесть тысяч"
+            7 -> "семь тысяч"
+            8 -> "восемь тысяч"
+            9 -> "девять тысяч"
+            else -> "тысяч"
+        }
+    }
+    if (count == 1) {
+        if (list.last() == "десять") return exception(n, list)
+        return when (n)
+        {
+            1 -> "один"
+            2 -> "два"
+            3 -> "три"
+            4 -> "четыре"
+            5 -> "пять"
+            6 -> "шесть"
+            7 -> "семь"
+            8 -> "восемь"
+            9 -> "девять"
+            else -> ""
+        }
+    }
+return ""
+}
+
+fun exception(n:Int, list: MutableList<String>): String { // Сотни
+    list.remove("десять")
+    return when (n)
+    {
+        0 -> "десять"
+        1 -> "одиннадцать"
+        2 -> "двенадцать"
+        3 -> "тринадцать"
+        4 -> "четырнадцать"
+        5 -> "пятнадцать"
+        6 -> "шестнадцать"
+        7 -> "семнадцать"
+        8 -> "восемнадцать"
+        9 -> "девятнадцать"
+        else -> ""
+    }
+}
+
+fun exceptionThousands(n:Int, list: MutableList<String>): String { // Сотни
+    list.remove("десять")
+    return when (n)
+    {
+        0 -> "десять тысяч"
+        1 -> "одиннадцать тысяч"
+        2 -> "двенадцать тысяч"
+        3 -> "тринадцать тысяч"
+        4 -> "четырнадцать тысяч"
+        5 -> "пятнадцать тысяч"
+        6 -> "шестнадцать тысяч"
+        7 -> "семнадцать тысяч"
+        8 -> "восемнадцать тысяч"
+        9 -> "девятнадцать тысяч"
+        else -> ""
+    }
+}
+fun digitNumber(n: Int): Int {
+    var number = n
+    var counter = 1
+    while (number / 10 != 0) {
+        number /= 10
+        counter++
+    }
+    return counter
+}
