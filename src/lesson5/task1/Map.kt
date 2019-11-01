@@ -110,8 +110,13 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
-
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    for((key, _) in a)
+    {
+        if (a[key] != b[key]) return false
+    }
+    return true
+}
 /**
  * Простая
  *
@@ -168,7 +173,19 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val resultMap = mutableMapOf<String,String>()
+    val valueSet = mutableSetOf<String>()
+    val keySet = mapA.keys + mapB.keys
+    for (key in keySet) {
+        valueSet.clear()
+        if (!mapA[key].isNullOrEmpty()) valueSet.add(mapA[key]!!)
+        if (!mapB[key].isNullOrEmpty()) valueSet.add(mapB[key]!!)
+        resultMap[key] = valueSet.joinToString(separator = ", ")
+    }
+    return resultMap
+}
+
 
 /**
  * Средняя
