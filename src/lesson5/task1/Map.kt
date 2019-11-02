@@ -247,7 +247,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    for (i in word) if (i !in chars) return false
+    for (i in word) if (i.toLowerCase() !in chars && i.toUpperCase() !in chars) return false
     return true
 }
 
@@ -263,7 +263,19 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val resultMap = mutableMapOf<String, Int>()
+    for (name in list) {
+        var i = 0
+        for (name1 in list) {
+            if (name == name1) {
+                i++
+            }
+        }
+        if (i > 1) resultMap[name] = i
+    }
+    return resultMap
+}
 
 /**
  * Средняя
