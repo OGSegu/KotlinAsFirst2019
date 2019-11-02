@@ -175,6 +175,13 @@ class Tests {
             )
         )
         assertEquals(
+            mapOf("" to "'XDvZZ&3YW@):H#nQgL, "),
+            mergePhoneBooks(
+                mapOf("" to "'XDvZZ&3YW@):H#nQgL"),
+                mapOf("" to "")
+            )
+        )
+        assertEquals(
             mapOf("Emergency" to "112, 911", "Police" to "02"),
             mergePhoneBooks(
                 mapOf("Emergency" to "112"),
