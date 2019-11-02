@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.digitNumber
 import java.io.File.separator
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -349,7 +350,5 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-
-// Скорее всего пропущу это задание, так как не успеваю до дедлайна. (оно не рабочее)
 
 fun russian(n: Int): String = TODO()
