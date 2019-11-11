@@ -3,8 +3,6 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import lesson3.task1.digitNumber
-import java.io.File.separator
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -261,12 +259,10 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     val result = mutableListOf<String>()
-    val list = convert(n,base)
-    for (i in list.indices)
-    {
-        if (list[i] in 10..36)
-        {
-            result.add(toAsciiChar(list[i]).toString())
+    val list = convert(n, base)
+    for (i in list.indices) {
+        if (list[i] >= 10) {
+            result.add(toAscii(list[i]).toString())
             continue
         }
         result.add(list[i].toString())
@@ -274,7 +270,7 @@ fun convertToString(n: Int, base: Int): String {
     return result.joinToString(separator = "")
 }
 
-fun toAsciiChar(n: Int): Char = (n + 87).toChar()
+fun toAscii(n: Int): Char = 'a' + (n - 10)
 
 
 /**
@@ -308,17 +304,19 @@ fun decimal(digits: List<Int>, base: Int): Int {
  */
 fun decimalFromString(str: String, base: Int): Int {
     var result = 0
+    var varX = 0
     for (i in str.length - 1 downTo 0) {
         result += when (str[i]) {
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> (str[i].toInt() - 48) * base.toDouble().pow(str.length - 1 - i).toInt()
-            else -> toAsciiInt(str[i]) * base.toDouble().pow(str.length - 1 - i).toInt()
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> (str[i] - '0') * base.toDouble().pow(varX).toInt()
+            else -> toAsciiInt(str[i]) * base.toDouble().pow(varX).toInt()
         }
+        varX += 1
 
     }
     return result
 }
 
-fun toAsciiInt(n: Char): Int = (n.toInt() - 87)
+fun toAsciiInt(n: Char): Int = (n - 'a') + 10
 
 /**
  * Сложная
@@ -329,17 +327,30 @@ fun toAsciiInt(n: Char): Int = (n.toInt() - 87)
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val arabicList = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
-    val romanList = listOf("M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I")
+    val list =
+        listOf(
+            Pair(1000, "M"),
+            Pair(900, "CM"),
+            Pair(500, "D"),
+            Pair(400, "CD"),
+            Pair(100, "C"),
+            Pair(90, "XC"),
+            Pair(50, "L"),
+            Pair(40, "XL"),
+            Pair(10, "X"),
+            Pair(9, "IX"),
+            Pair(5, "V"),
+            Pair(4, "IV"),
+            Pair(1, "I")
+        )
     val result = mutableListOf<String>()
     var number = n
-        for (i in arabicList.indices)
-        {
-            while (number >= arabicList[i]) {
-                    number -= arabicList[i]
-                    result.add (romanList[i])
-            }
+    for (i in list.indices) {
+        while (number >= list[i].first) {
+            number -= list[i].first
+            result.add(list[i].second)
         }
+    }
     return result.joinToString(separator = "")
 }
 

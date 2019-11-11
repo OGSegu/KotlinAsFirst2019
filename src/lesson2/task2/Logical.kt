@@ -87,8 +87,7 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
         b
     else c
 
-    if ((minOf(a, b, c) <= minOf(r, s)) && (averageLength <= maxOf(r, s))) return true
-    return false
+    return ((minOf(a, b, c) <= minOf(r, s)) && (averageLength <= maxOf(r, s)))
 }
 
 

@@ -134,7 +134,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
     val keyList = mutableListOf<String>()
     for ((key, value) in a) {
-        if (b.containsKey(key) && b.getValue(key) == value) keyList.add(key)
+        if (b[key] == value) keyList.add(key)
     }
     for (element in keyList) a.remove(element)
 }
@@ -146,15 +146,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    val result = mutableSetOf<String>()
-    for (i in a.indices) {
-        for (k in b.indices) {
-            if (a[i] == b[k] && (a[i] !in result)) result.add(a[i])
-        }
-    }
-    return result.toList()
-}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a.intersect(b)).toList()
 
 /**
  * Средняя
@@ -173,12 +165,12 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
+
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val resultMap = mutableMapOf<String, String>()
-    val valueSet = mutableSetOf<String>()
     val keySet = mapA.keys + mapB.keys
     for (key in keySet) {
-        valueSet.clear()
+        val valueSet = mutableSetOf<String>()
         if (mapA.containsKey(key)) valueSet.add(mapA.getValue(key))
         if (mapB.containsKey(key)) valueSet.add(mapB.getValue(key))
         resultMap[key] = valueSet.joinToString(separator = ", ")
@@ -288,8 +280,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  */
 fun hasAnagrams(words: List<String>): Boolean {
     val setChars = mutableSetOf<Set<Char>>()
-    for (chars in words)
-    {
+    for (chars in words) {
         setChars.add(chars.toSet())
     }
     return words.count() != setChars.count()
@@ -339,16 +330,14 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    val valueMap = mutableMapOf<Int,Int>()
-    for (i in list.indices)
-    {
-        if (number - list[i] in valueMap)
-        {
+    val valueMap = mutableMapOf<Int, Int>()
+    for (i in list.indices) {
+        if (number - list[i] in valueMap) {
             return Pair(valueMap[number - list[i]]!!, i)
         }
         valueMap[list[i]] = i
     }
-    return Pair(-1,-1)
+    return Pair(-1, -1)
 }
 
 /**
