@@ -149,7 +149,7 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    val kingBishopPlus =  (kingX + kingY) == (bishopX + bishopY)
+    val kingBishopPlus = (kingX + kingY) == (bishopX + bishopY)
     val kingBishopMinus = (kingX - kingY) == (bishopX - bishopY)
     val kingRookXY = (kingX - rookX == 0) || (kingY - rookY == 0)
 

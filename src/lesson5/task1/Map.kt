@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import lesson4.task1.mean
+
 /**
  * Пример
  *
@@ -189,21 +191,8 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val resultMap = mutableMapOf<String, Double>()
-    for ((name, _) in stockPrices) {
-        var i = 0
-        var p = 0.0
-        for ((name1, value2) in stockPrices) {
-            if (name == name1) {
-                i++
-                p += value2
-            }
-        }
-        resultMap[name] = p / i
-    }
-    return resultMap
-}
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> =
+    stockPrices.groupBy({ it.first }, { it.second }).mapValues { mean(it.value) }
 
 /**
  * Средняя
@@ -220,14 +209,9 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    val resultMap = mutableMapOf<String, Double>()
-    for ((string, pair) in stuff) {
-        if (pair.first == kind) resultMap[string] = pair.second
-    }
-    val result = resultMap.minBy { it.value }
-    return result?.key
-}
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? =
+    stuff.filter { it.value.first == kind }.minBy { it.value.second }?.key
+
 
 /**
  * Средняя
@@ -239,8 +223,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    for (i in word) if (i.toLowerCase() !in chars && i.toUpperCase() !in chars) return false
-    return true
+    val wordList = word.toLowerCase().toSet()
+    val charList = chars.map { it.toLowerCase() }.toSet()
+    return wordList.all { it in charList}
+
 }
 
 /**
@@ -256,15 +242,10 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val resultMap = mutableMapOf<String, Int>()
-    for (name in list) {
-        var i = 0
-        for (name1 in list) {
-            if (name == name1) {
-                i++
-            }
-        }
-        if (i > 1) resultMap[name] = i
+    val resultMap = mutableMapOf<String,Int>()
+    for (chars in list) {
+        val i = list.count { it == chars }
+        if (i  > 1) resultMap[chars] = i
     }
     return resultMap
 }
