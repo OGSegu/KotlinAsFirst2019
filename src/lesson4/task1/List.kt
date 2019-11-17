@@ -362,4 +362,101 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val numberList = mutableListOf<String>()
+    var number = n
+    var tempNumber: Int
+    var counter = 1
+    while (number != 0) {
+        tempNumber = number % 10
+        number /= 10
+        when (counter) {
+            1 -> numberList.add(units(tempNumber, number))
+            2, 5 -> numberList.add(dozens(tempNumber))
+            3, 6 -> numberList.add(hundreds(tempNumber))
+            4 -> numberList.add(except(tempNumber, number))
+        }
+        counter++
+    }
+    numberList.removeAll { it == "" }
+    return numberList.reversed().joinToString(separator = " ")
+}
+fun units(n: Int, number: Int): String {
+    if (number % 10 == 1) {
+        return when (n) {
+            0 -> "десять"
+            1 -> "одиннадцать"
+            2 -> "двенадцать"
+            3 -> "тринадцать"
+            4 -> "четырнадцать"
+            5 -> "пятнадцать"
+            6 -> "шестнадцать"
+            7 -> "семнадцать"
+            8 -> "восемнадцать"
+            9 -> "девятнадцать"
+            else -> ""
+        }
+    } else {
+        return when (n) {
+            1 -> "один"
+            2 -> "два"
+            3 -> "три"
+            4 -> "четыре"
+            5 -> "пять"
+            6 -> "шесть"
+            7 -> "семь"
+            8 -> "восемь"
+            9 -> "девять"
+            else -> ""
+        }
+    }
+}
+
+fun dozens(n: Int): String {
+    return when (n) {
+        2 -> "двадцать"
+        3 -> "тридцать"
+        4 -> "сорок"
+        5 -> "пятьдесят"
+        6 -> "шестьдесят"
+        7 -> "семьдесят"
+        8 -> "восемьдесят"
+        9 -> "девяносто"
+        else -> ""
+    }
+}
+
+fun hundreds(n: Int): String {
+    return when (n) {
+        1 -> "сто"
+        2 -> "двести"
+        3 -> "триста"
+        4 -> "четыреста"
+        5 -> "пятьсот"
+        6 -> "шестьсот"
+        7 -> "семьсот"
+        8 -> "восемьсот"
+        9 -> "девятьсот"
+        else -> ""
+    }
+}
+
+fun except(n: Int, number: Int): String {
+    if (number % 10 == 1) {
+        return (units(n, number) + " тысяч")
+    } else {
+        return when (n) {
+            0 -> "тысяч"
+            1 -> "одна тысяча"
+            2 -> "две тысячи"
+            3 -> "три тысячи"
+            4 -> "четыре тысячи"
+            5 -> "пять тысяч"
+            6 -> "шесть тысяч"
+            7 -> "семь тысяч"
+            8 -> "восемь тысяч"
+            9 -> "девять тысяч"
+            else -> ""
+        }
+    }
+}
