@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 /**
  * Пример
  *
@@ -69,7 +71,35 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val list = str.split(" ")
+    if (list.size != 3) return ""
+    val number = list[0].toIntOrNull() ?: return ""
+    val month = monthToNum(list[1])
+    if (month == -1) return ""
+    val year = list[2].toIntOrNull() ?: return ""
+    if (number > daysInMonth(month, year)) return ""
+    return String.format("%02d.%02d.%d", number, month, year)
+}
+
+/*Была еще идея создать обычный лист и использовать индекс как номер месяца? Какой вариант лучше?*/
+fun monthToNum(month: String): Int {
+    return when (month) {
+        "января" -> 1
+        "февраля" -> 2
+        "марта" -> 3
+        "апреля" -> 4
+        "мая" -> 5
+        "июня" -> 6
+        "июля" -> 7
+        "августа" -> 8
+        "сентября" -> 9
+        "октября" -> 10
+        "ноября" -> 11
+        "декабря" -> 12
+        else -> -1
+    }
+}
 
 /**
  * Средняя
@@ -81,7 +111,34 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val list = digital.split(".")
+    if (list.size != 3) return ""
+    val number = list[0].toIntOrNull() ?: return ""
+    val year = list[2].toIntOrNull() ?: return ""
+    if (number > daysInMonth(list[1].toInt(), year)) return ""
+    val month = numToMonth(list[1].toInt())
+    if (month.isEmpty()) return ""
+    return String.format("%d %s %d", number, month, year)
+}
+
+fun numToMonth(month: Int): String {
+    return when (month) {
+        1 -> "января"
+        2 -> "февраля"
+        3 -> "марта"
+        4 -> "апреля"
+        5 -> "мая"
+        6 -> "июня"
+        7 -> "июля"
+        8 -> "августа"
+        9 -> "сентября"
+        10 -> "октября"
+        11 -> "ноября"
+        12 -> "декабря"
+        else -> ""
+    }
+}
 
 /**
  * Средняя
