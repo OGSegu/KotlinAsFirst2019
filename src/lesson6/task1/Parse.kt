@@ -154,7 +154,11 @@ fun numToMonth(month: Int): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    Regex("""(^(\+?[0-9]*))[0-9\-( )]+$""").find(phone) ?: return ""
+    if (phone.contains(Regex("""(\( *\))"""))) return ""
+    return Regex("""[\s-()]""").replace(phone, "")
+}
 
 /**
  * Средняя
@@ -166,7 +170,13 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    if (!jumps.contains(Regex("""\d+"""))) return -1
+    val list = jumps.replace(Regex("[^0-9]"), ",").split(",")
+    val duplicates = list.count { it == list.max() }
+    if (duplicates != 1) return -1
+    return list.max()!!.toInt()
+}
 
 /**
  * Сложная
