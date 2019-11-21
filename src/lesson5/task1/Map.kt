@@ -226,7 +226,6 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val wordList = word.toLowerCase().toSet()
     val charList = chars.map { it.toLowerCase() }.toSet()
     return wordList.all { it in charList }
-
 }
 
 /**
@@ -260,11 +259,15 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val setChars = mutableSetOf<Set<Char>>()
-    for (chars in words) {
-        setChars.add(chars.toSet())
+    for (i in words.indices) {
+       val set = words[i].toSet()
+        for (k in words.indices) {
+            if (i == k) continue
+            val compareSet = words[k].toSet()
+            if ((set.containsAll(compareSet)) && (set.size == compareSet.size)) return true
+        }
     }
-    return words.count() != setChars.count()
+    return false
 }
 
 /**
