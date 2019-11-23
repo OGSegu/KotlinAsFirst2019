@@ -212,7 +212,13 @@ fun bestHighJump(jumps: String): Int {
  */
 fun plusMinus(expression: String): Int {
     Regex("""((\d+\s[+\-]\s)+)?(\d+)$""").matchEntire(expression) ?: throw IllegalArgumentException()
-    return 1
+    val string = expression.replace(" ", "")
+    val finded = Regex("""[+-]?\d+""").findAll(string)
+    var result = 0
+    for (x in finded) {
+        result += x.value.toInt()
+    }
+    return result
 }
 
 /**
@@ -251,7 +257,18 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    Regex("""(\S+\s+\d+(\.\d+)?;?\s?)+""").matchEntire(description) ?: return ""
+    val list = description.split(Regex(""";\s"""))
+    val map = mutableMapOf<String, Float>()
+    for (i in list.indices) {
+        val name = list[i].substringBefore(" ")
+        val value = list[i].substringAfter(" ").toFloat()
+        map[name] = value
+    }
+    val result = map.maxBy { it.value } ?: return ""
+    return result.key
+}
 
 /**
  * Сложная
