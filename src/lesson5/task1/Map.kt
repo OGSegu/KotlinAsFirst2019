@@ -3,6 +3,7 @@
 package lesson5.task1
 
 import lesson4.task1.mean
+import java.lang.Integer.max
 
 /**
  * Пример
@@ -260,7 +261,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  */
 fun hasAnagrams(words: List<String>): Boolean {
     for (i in words.indices) {
-       val set = words[i].toSet()
+        val set = words[i].toSet()
         for (k in words.indices) {
             if (i == k) continue
             val compareSet = words[k].toSet()
@@ -345,4 +346,28 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val items = treasures.toList()
+    val listValue = Array(treasures.size + 1) { Array(capacity + 1) { 0 } }
+    val resultSet = mutableSetOf<String>()
+    var size = treasures.size
+    var weight = capacity
+    for (i in 1..size) {
+        for (j in 1..weight) {
+            if (j < items[i - 1].second.first)
+                listValue[i][j] = listValue[i - 1][j]
+            else listValue[i][j] =
+                max(listValue[i - 1][j], items[i - 1].second.second + listValue[i - 1][j - items[i - 1].second.first])
+        }
+    }
+    while (size > 0) {
+        if (listValue[size - 1][weight] != listValue[size][weight]) {
+            resultSet.add(items[size - 1].first)
+            weight -= items[size - 1].second.first
+            size--
+        } else {
+            size--
+        }
+    }
+    return resultSet
+}
