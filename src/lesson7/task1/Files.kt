@@ -81,8 +81,8 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 fun sibilants(inputName: String, outputName: String) {
     var file = File(inputName).readText()
     val writer = File(outputName).bufferedWriter()
-    val count = Regex("""[жчшщ][ыяю]""", IGNORE_CASE).findAll(file)
-    for (string in count) {
+    val format = Regex("""[жчшщ][ыяю]""", IGNORE_CASE).findAll(file)
+    for (string in format) {
         file = file.replace(string.value, transformChar(string.value))
     }
     writer.write(file)
@@ -150,7 +150,29 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val reader = File(inputName).readLines()
+    val writer = File(outputName).bufferedWriter()
+    val formatted = mutableListOf<String>()
+    var maxValue = 0
+    for (i in reader.indices) {
+        formatted.add(Regex("^(.\\s+)").replace(reader[i], ""))
+        if (formatted[i].length > maxValue) maxValue = formatted[i].length
+    }
+    for (line in formatted) {
+        var counter = 0
+        var spaces = maxValue - (line.length - Regex("""\s""").findAll(line).count())
+        val list = line.split(" ").toMutableList()
+        while (spaces != 0) {
+            if (list.size < 2) break
+            if (list.lastIndex == counter) counter = 0
+            list[counter] += " "
+            spaces--
+            counter++
+        }
+        writer.write(list.joinToString(separator = ""))
+        writer.newLine()
+    }
+    writer.close()
 }
 
 /**
@@ -286,7 +308,43 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val charsList = listOf<String>("**", "*", "~~")
+    val charsTrigger = mutableListOf<Boolean>(false, false, false)
+    val transformList = listOf<Pair<String, String>>(
+        Pair("<b>", "</b>"),
+        Pair("<i>", "</i>"),
+        Pair("<s>", "</s>")
+    )
+    val readerList = File(inputName).readLines()
+    val writer = File(outputName).bufferedWriter()
+    writer.write("<html><body>")
+    if (readerList.isNotEmpty()) writer.write("<p>")
+    for (line in readerList.indices) {
+        if (readerList[line].isEmpty()) {
+            writer.write("</p>")
+            if (readerList[line+1].isNotEmpty()) writer.write("<p>")
+        }
+        val splitList = readerList[line].split(" ").toMutableList()
+        for (i in charsList.indices) {
+            val replaceChar = charsList[i]
+            for (k in splitList.indices) {
+                if (splitList[k].contains(Regex(Regex.escape(replaceChar)))) {
+                    if (!charsTrigger[i]) {
+                        splitList[k] = splitList[k].replaceFirst(charsList[i], transformList[i].first)
+                        charsTrigger[i] = true
+                    }
+                    if (charsTrigger[i] && splitList[k].contains(Regex(Regex.escape(replaceChar)))) {
+                        splitList[k] = splitList[k].replaceFirst(charsList[i], transformList[i].second)
+                        charsTrigger[i] = false
+                    }
+                }
+            }
+        }
+        writer.write(splitList.joinToString(separator = " "))
+        if (line == readerList.lastIndex) writer.write("</p>")
+    }
+    writer.write("</body>\n</html>")
+    writer.close()
 }
 
 /**
