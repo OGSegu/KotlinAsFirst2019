@@ -79,13 +79,20 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    var file = File(inputName).readText()
+    val file = File(inputName).readText()
     val writer = File(outputName).bufferedWriter()
-    val format = Regex("""[жчшщ][ыяю]""", IGNORE_CASE).findAll(file)
-    for (string in format) {
-        file = file.replace(string.value, transformChar(string.value))
+    val format = Regex("""[жчшщ][ыяю]""", IGNORE_CASE)
+    var i = 0
+    while (i <= file.length - 1) {
+        if (i != file.length - 1) if (format.matches(file[i].toString() + file[i + 1].toString())) {
+            val charConnect = file[i].toString() + file[i + 1].toString()
+            writer.write(transformChar(charConnect))
+            i += 2
+            continue
+        }
+        writer.write(file[i].toString())
+        i++
     }
-    writer.write(file)
     writer.close()
 }
 
@@ -160,8 +167,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     }
     for (line in formatted) {
         var counter = 0
-        var spaces = maxValue - (line.length - Regex("""\s""").findAll(line).count())
-        val list = line.split(" ").toMutableList()
+        var spaces = maxValue - (line.length - Regex("""(\s)""").findAll(line).count())
+        val list = line.split("").toMutableList()
         while (spaces != 0) {
             if (list.size < 2) break
             if (list.lastIndex == counter) counter = 0
@@ -322,7 +329,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     for (line in readerList.indices) {
         if (readerList[line].isEmpty()) {
             writer.write("</p>")
-            if (readerList[line+1].isNotEmpty()) writer.write("<p>")
+            if (readerList[line + 1].isNotEmpty()) writer.write("<p>")
         }
         val splitList = readerList[line].split(" ").toMutableList()
         for (i in charsList.indices) {
