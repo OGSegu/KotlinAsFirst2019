@@ -185,7 +185,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         }
         resultList.add(wordSentence.joinToString(separator = ""))
     }
-    writer.write(resultList.joinToString(separator = "\n"))
+    writer.write(resultList.joinToString(separator = """\n"""))
     writer.close()
 }
 
