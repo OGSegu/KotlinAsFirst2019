@@ -157,28 +157,35 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    val reader = File(inputName).readLines()
-    val writer = File(outputName).bufferedWriter()
-    val formatted = mutableListOf<String>()
-    var maxValue = 0
-    for (i in reader.indices) {
-        formatted.add(Regex("^(.\\s+)").replace(reader[i], ""))
-        if (formatted[i].length > maxValue) maxValue = formatted[i].length
+    val file = File(inputName).readText()
+    val writer = File(outputName).writer()
+    var maxLength = 0
+    val list = file.split("\r\n").toMutableList()
+    val resultList = mutableListOf<String>()
+    val sb = StringBuilder()
+    for (i in list.indices) {
+        list[i] = list[i].replace(Regex("""(^.?\s+)|(\s+${'$'})"""), "")
+        if (list[i].length > maxLength) maxLength = list[i].length
     }
-    for (line in formatted) {
-        var counter = 0
-        var spaces = maxValue - (line.length - Regex("""(\s)""").findAll(line).count())
-        val list = line.split("").toMutableList()
-        while (spaces != 0) {
-            if (list.size < 2) break
-            if (list.lastIndex == counter) counter = 0
-            list[counter] += " "
-            spaces--
-            counter++
+    for (sentence in list) {
+        if (sentence.isEmpty()) continue
+        val wordSentence = sentence.split(" ").toMutableList()
+        var spaces = maxLength - (sentence.length - Regex("""\s""").findAll(sentence).count())
+        if (wordSentence.size == 1) {
+            resultList.add(wordSentence[0])
+            continue
         }
-        writer.write(list.joinToString(separator = ""))
-        writer.newLine()
+        var i = 0
+        while (spaces != 0) {
+            if (i == wordSentence.lastIndex) i = 0
+            wordSentence[i] = (sb.append(wordSentence[i]).append(" ")).toString()
+            spaces--
+            i++
+            sb.clear()
+        }
+        resultList.add(wordSentence.joinToString(separator = ""))
     }
+    writer.write(resultList.joinToString(separator = "\n"))
     writer.close()
 }
 
