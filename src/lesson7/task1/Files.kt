@@ -157,35 +157,33 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    val file = File(inputName).readText()
-    val writer = File(outputName).writer()
-    var maxLength = 0
-    val list = file.split("\r\n").toMutableList()
-    val resultList = mutableListOf<String>()
+    val file = File(inputName).readLines().toMutableList()
+    val writer = File(outputName).bufferedWriter()
+    var maxValue = 0
     val sb = StringBuilder()
-    for (i in list.indices) {
-        list[i] = list[i].replace(Regex("""(^.?\s+)|(\s+${'$'})"""), "")
-        if (list[i].length > maxLength) maxLength = list[i].length
+    for (i in file.indices) {
+        file[i] = file[i].trim()
+        if (file[i].length > maxValue) maxValue = file[i].length
     }
-    for (sentence in list) {
-        if (sentence.isEmpty()) continue
-        val wordSentence = sentence.split(" ").toMutableList()
-        var spaces = maxLength - (sentence.length - Regex("""\s""").findAll(sentence).count())
-        if (wordSentence.size == 1) {
-            resultList.add(wordSentence[0])
-            continue
+    for (k in file.indices) {
+        val resultList = file[k].split(" ").toMutableList()
+        var spaces = maxValue - (file[k].length - Regex("""\s""").findAll(file[k]).count())
+        var j = 0
+        if (resultList.size > 1) {
+            while (spaces != 0) {
+                if (j == resultList.lastIndex) {
+                    j = 0
+                    continue
+                }
+                resultList[j] = sb.append(resultList[j]).append(" ").toString()
+                spaces--
+                j++
+                sb.clear()
+            }
         }
-        var i = 0
-        while (spaces != 0) {
-            if (i == wordSentence.lastIndex) i = 0
-            wordSentence[i] = (sb.append(wordSentence[i]).append(" ")).toString()
-            spaces--
-            i++
-            sb.clear()
-        }
-        resultList.add(wordSentence.joinToString(separator = ""))
+        writer.write(resultList.joinToString(separator = ""))
+        writer.newLine()
     }
-    writer.write(resultList.joinToString(separator = """\n"""))
     writer.close()
 }
 
