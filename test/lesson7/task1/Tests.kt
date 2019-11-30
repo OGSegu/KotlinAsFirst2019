@@ -123,7 +123,7 @@ Basic, Ruby, Swift.
         alignFileByWidth("input/width_in1.txt", "temp.txt")
         assertFileContent(
             "temp.txt",
-            """аъбмб\nАЪБМБ -"""
+            """БВАБЗЪБ    ЁВВВВЮБ   бвабзъб\nБВААБ / ЁВвввЮб -- ЙЙВФ ИБ -"""
         )
         File("temp.txt").delete()
 
