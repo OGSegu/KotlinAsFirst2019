@@ -338,6 +338,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     )
     val file = File(inputName).readText()
     val writer = File(outputName).bufferedWriter()
+    writer.write(File(outputName).readText().replace(Regex("(?<=.)((\\n\\n)|(\\r\\n\\r\\n))(?=.)"), "</p><p>")) // Может выглядит мягко говоря не очень симпатично, но смысл в том, что бы вставить параграф в нужное место.
     writer.write("<html><body>")
     if (file.isNotEmpty()) {
         writer.write("<p>")
@@ -374,7 +375,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
     if (file.isNotEmpty()) writer.write("</p>")
     writer.write("</body></html>")
-    writer.write(File(outputName).readText().replace(Regex("(?<!<p>)((\\n\\n+)|(\\r\\n\\r\\n)+)(?!</p>)"), "</p><p>")) // Может выглядит мягко говоря не очень симпатично, но смысл в том, что бы вставить параграф в нужное место.
     writer.close()
 }
 
