@@ -341,7 +341,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     writer.write("<html><body>")
     if (file.isNotEmpty()) {
         writer.write("<p>")
-        file = file.replace(Regex("(\\n\\n)+|(\\r\\n\\r\\n)+"), "</p><p>")
+        file = file.replace(Regex("(?<!<p>)(\\n\\n+|(\\r\\n\\r\\n)+)(?!</p>)"), "</p><p>") // Может выглядит мягко говоря не очень симпатично, но смысл в том, что бы ставить параграф в нужное место.
     }
     var i = 0
     while (i < file.length) {
