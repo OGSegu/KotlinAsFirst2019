@@ -162,7 +162,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     var maxValue = 0
     var file = File(inputName).readLines().toMutableList()
     if (file.isNotEmpty()) {
-        if (file[0].contains("\\n")) file = file[0].split("""\n""").toMutableList()
+        if (file[0].contains("\\n   ")) file = file[0].split("""\n""").toMutableList()
         val linesCounter = file.size
         for (i in file.indices) {
             file[i] = file[i].trim()
@@ -190,8 +190,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                 else writer.write("\n")
             }
         }
-    }
-    else {
+    } else {
         writer.write("")
     }
     writer.close()
@@ -337,35 +336,45 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         Pair("<i>", "</i>"),
         Pair("<s>", "</s>")
     )
-    val readerList = File(inputName).readLines()
+    var file = File(inputName).readText()
     val writer = File(outputName).bufferedWriter()
     writer.write("<html><body>")
-    if (readerList.isNotEmpty()) writer.write("<p>")
-    for (line in readerList.indices) {
-        if (readerList[line].isEmpty()) {
-            writer.write("</p>")
-            if (readerList[line + 1].isNotEmpty()) writer.write("<p>")
-        }
-        val splitList = readerList[line].split(" ").toMutableList()
-        for (i in charsList.indices) {
-            val replaceChar = charsList[i]
-            for (k in splitList.indices) {
-                if (splitList[k].contains(Regex(Regex.escape(replaceChar)))) {
-                    if (!charsTrigger[i]) {
-                        splitList[k] = splitList[k].replaceFirst(charsList[i], transformList[i].first)
-                        charsTrigger[i] = true
-                    }
-                    if (charsTrigger[i] && splitList[k].contains(Regex(Regex.escape(replaceChar)))) {
-                        splitList[k] = splitList[k].replaceFirst(charsList[i], transformList[i].second)
-                        charsTrigger[i] = false
-                    }
-                }
-            }
-        }
-        writer.write(splitList.joinToString(separator = " "))
-        if (line == readerList.lastIndex) writer.write("</p>")
+    if (file.isNotEmpty()) {
+        writer.write("<p>\n")
+        file = file.replace(Regex("(\\n\\n)|(\\r\\n\\r\\n)"), "</p><p>")
     }
-    writer.write("</body>\n</html>")
+    var i = 0
+    while (i < file.length) {
+        val element = file[i].toString()
+        if (i != file.lastIndex)
+            if (charsList.contains(element + file[i + 1].toString())) {
+                val index = charsList.indexOf(element + element)
+                if (!charsTrigger[index]) {
+                    writer.write(transformList[index].first)
+                    charsTrigger[index] = true
+                } else {
+                    writer.write(transformList[index].second)
+                    charsTrigger[index] = false
+                }
+                i += 2
+                continue
+            }
+        if (charsList.contains(element)) {
+            if (!charsTrigger[1]) {
+                writer.write(transformList[1].first)
+                charsTrigger[1] = true
+            } else {
+                writer.write(transformList[1].second)
+                charsTrigger[1] = false
+            }
+            i++
+            continue
+        }
+        writer.write(element)
+        i++
+    }
+    if (file.isNotEmpty()) writer.write("</p>")
+    writer.write("</body></html>")
     writer.close()
 }
 

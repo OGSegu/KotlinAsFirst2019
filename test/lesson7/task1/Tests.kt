@@ -205,7 +205,7 @@ Basic, Ruby, Swift.
         val result = File("temp.html").readText().replace(Regex("[\\s\\n\\t]"), "")
         val expected =
             """
-                    <html>
+                     <html>
                         <body>
                             <p>
                                 Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
