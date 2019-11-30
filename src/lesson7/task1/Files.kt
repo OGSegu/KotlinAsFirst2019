@@ -340,8 +340,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     writer.write("<html><body>")
     if (file.isNotEmpty()) {
-        writer.write("<p>\n")
-        file = file.replace(Regex("(\\n\\n)|(\\r\\n\\r\\n)"), "</p><p>")
+        writer.write("<p>")
+        file = file.replace(Regex("(\\n\\n)+|(\\r\\n\\r\\n)+"), "</p><p>")
     }
     var i = 0
     while (i < file.length) {
