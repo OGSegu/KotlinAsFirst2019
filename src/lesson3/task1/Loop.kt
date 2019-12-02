@@ -2,6 +2,7 @@
 
 package lesson3.task1
 
+import kotlin.math.min
 import kotlin.math.sqrt
 import kotlin.math.pow
 
@@ -104,7 +105,13 @@ fun fib(n: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var average = 1
+    for (i in 2..min(m,n)) {
+        if (m % i  == 0 && n % i == 0) average = i
+    }
+    return (m*n)/average
+}
 
 /**
  * Простая
@@ -207,7 +214,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя
@@ -217,7 +224,16 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var number = n
+    var temp: Int
+    for (i in 1 until digitNumber(number)) {
+        temp = number % 10
+        number /= 10
+        if (temp != number % 10) return true
+    }
+    return false
+}
 
 /**
  * Сложная

@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import java.io.BufferedWriter
 import java.io.File
 import kotlin.text.RegexOption.*
 
@@ -126,7 +127,28 @@ fun transformChar(char: String): String {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val file = File(inputName).readLines().toMutableList()
+    val writer = File(outputName).bufferedWriter()
+    var maxLength = -1
+    for (i in file.indices) {
+        file[i] = file[i].trim()
+        if (file[i].length > maxLength) maxLength = file[i].length
+    }
+    for (k in file.indices) {
+        val spaces = maxLength - file[k].length
+        addSpaces(spaces / 2, writer)
+        writer.write(file[k])
+        writer.newLine()
+    }
+    writer.close()
+}
+
+fun addSpaces(amount: Int, writer: BufferedWriter) {
+    var spaces = amount
+    while (spaces != 0) {
+        writer.write(" ")
+        spaces--
+    }
 }
 
 /**
@@ -339,7 +361,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var file = File(inputName).readText()
     val writer = File(outputName).bufferedWriter()
     file = file.replace(
-        Regex("""(?<=.)((\\n\\n)|(\n\n)|(\\r\\n\\r\\n)|(\r\n\r\n))(?=.)"""),
+        Regex("""(?<=.)((\\n\\n)|(\n\n)|(\\r\\n\\r\\n)|(\r\n\r\n))+(?=.)"""),
         "</p><p>"
     ) // Может выглядит мягко говоря не очень симпатично, но смысл в том, что бы вставить параграф в нужное место.
     writer.write("<html><body>")
