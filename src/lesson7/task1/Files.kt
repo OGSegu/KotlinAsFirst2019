@@ -351,56 +351,62 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val charsList = listOf<String>("**", "*", "~~")
-    val charsTrigger = mutableListOf<Boolean>(false, false, false)
-    val transformList = listOf<Pair<String, String>>(
-        Pair("<b>", "</b>"),
-        Pair("<i>", "</i>"),
-        Pair("<s>", "</s>")
+    val charList = mutableMapOf<String, Boolean>(
+        "**" to false,
+        "*" to false,
+        "~~" to false
     )
-    var file = File(inputName).readText()
+    val file = File(inputName).readLines()
     val writer = File(outputName).bufferedWriter()
-    file = file.replace(
-        Regex("""(?<=.)((\\n\\n)|(\n\n)|(\\r\\n\\r\\n)|(\r\n\r\n))+(?=.)"""),
-        "</p><p>"
-    ) // Может выглядит мягко говоря не очень симпатично, но смысл в том, что бы вставить параграф в нужное место.
     writer.write("<html><body>")
     if (file.isNotEmpty()) {
         writer.write("<p>")
-    }
-    var i = 0
-    while (i < file.length) {
-        val element = file[i].toString()
-        if (i != file.lastIndex)
-            if (charsList.contains(element + file[i + 1].toString())) {
-                val index = charsList.indexOf(element + element)
-                if (!charsTrigger[index]) {
-                    writer.write(transformList[index].first)
-                    charsTrigger[index] = true
-                } else {
-                    writer.write(transformList[index].second)
-                    charsTrigger[index] = false
+        for (line in file.indices) {
+            var i = 0
+            if (file[line].isEmpty() && line != file.lastIndex) writer.write("</p><p>")
+            else {
+                while (i <= file[line].lastIndex) {
+                    if (i == file[line].lastIndex) {
+                        writer.write(file[line][i].toString())
+                        i++
+                        continue
+                    }
+                    when {
+                        charList.containsKey(file[line][i].toString() + file[line][i + 1].toString()) -> {
+                            val key = file[line][i].toString() + file[line][i + 1].toString()
+                            val result = transformChar(key, charList.getValue(key))
+                            charList[key] = !charList[key]!!
+                            writer.write(result)
+                            i += 2
+                        }
+                        charList.containsKey(file[line][i].toString()) -> {
+                            val key = file[line][i].toString()
+                            val result = transformChar(key, charList.getValue(key))
+                            charList[key] = !charList[key]!!
+                            writer.write(result)
+                            i++
+                        }
+                        else -> {
+                            writer.write(file[line][i].toString())
+                            i++
+                        }
+                    }
                 }
-                i += 2
-                continue
             }
-        if (charsList.contains(element)) {
-            if (!charsTrigger[1]) {
-                writer.write(transformList[1].first)
-                charsTrigger[1] = true
-            } else {
-                writer.write(transformList[1].second)
-                charsTrigger[1] = false
-            }
-            i++
-            continue
         }
-        writer.write(element)
-        i++
+        writer.write("</p>")
     }
-    if (file.isNotEmpty()) writer.write("</p>")
     writer.write("</body></html>")
     writer.close()
+}
+
+fun transformChar(char: String, triggerStatus: Boolean): String {
+    return when (char) {
+        "**" -> if (!triggerStatus) "<b>" else "</b>"
+        "*" -> if (!triggerStatus) "<i>" else "</i>"
+        "~~" -> if (!triggerStatus) "<s>" else "</s>"
+        else -> ""
+    }
 }
 
 /**
