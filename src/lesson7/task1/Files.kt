@@ -351,7 +351,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     resultList.add("<html><body><p>")
     var pTrigger = true
     for (line in File(inputName).readLines()) {
-        if (line.isBlank() && resultList.last() != "<p>") {
+        if (line.isEmpty() && resultList.last() != "<p>") {
             if (pTrigger) {
                 resultList.add("</p>")
                 pTrigger = false
@@ -502,7 +502,6 @@ fun toTag(symbols: String, status: Boolean): String {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    TODO()
 }
 
 /**
