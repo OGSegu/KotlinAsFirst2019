@@ -352,8 +352,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     resultList.add("<body>")
     resultList.add("<p>")
     var pTrigger = true
-    for (line in File(inputName).readLines()) {
-        if (line.isEmpty() && resultList.last() != "<p>") {
+    for ((lineNumber, line) in File(inputName).readLines().withIndex()) {
+        if (line.isEmpty() && lineNumber != File(inputName).readLines().lastIndex) {
+            if (File(inputName).readLines()[lineNumber + 1].isEmpty()) continue
             if (pTrigger) {
                 resultList.add("</p>")
                 pTrigger = false
