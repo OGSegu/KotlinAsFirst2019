@@ -182,19 +182,13 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     val sb = StringBuilder()
     var maxValue = 0
-    var file = File(inputName).readLines().toMutableList()
-    if (file.isEmpty()) {
-        return
+    for (line in File(inputName).readLines()) {
+        if (line.trim().length > maxValue) maxValue = line.trim().length
     }
-    if (file[0].contains("\\n   ")) file = file[0].split("""\n""").toMutableList()
-    val linesCounter = file.size
-    for (i in file.indices) {
-        file[i] = file[i].trim()
-        if (file[i].length > maxValue) maxValue = file[i].length
-    }
-    for (k in file.indices) {
-        val resultList = file[k].split(Regex("""\s+|\\n""")).toMutableList()
-        var spaces = maxValue - (file[k].length - Regex("""\s""").findAll(file[k]).count())
+    for (line in File(inputName).readLines()) {
+        val fixedLine = line.trim()
+        val resultList = fixedLine.split(Regex("""\s+""")).toMutableList()
+        var spaces = maxValue - (fixedLine.length - Regex("""\s""").findAll(fixedLine).count())
         var j = 0
         if (resultList.size > 1) {
             while (spaces != 0) {
@@ -209,12 +203,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             }
         }
         writer.write(resultList.joinToString(separator = ""))
-        if (k != file.lastIndex) {
-            if (linesCounter == 1) writer.write("\\n")
-            else writer.write("\n")
-        }
+        writer.newLine()
     }
-    writer.write("")
     writer.close()
 }
 
