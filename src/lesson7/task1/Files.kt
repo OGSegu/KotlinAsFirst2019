@@ -183,37 +183,38 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val sb = StringBuilder()
     var maxValue = 0
     var file = File(inputName).readLines().toMutableList()
-    if (file.isNotEmpty()) {
-        if (file[0].contains("\\n   ")) file = file[0].split("""\n""").toMutableList()
-        val linesCounter = file.size
-        for (i in file.indices) {
-            file[i] = file[i].trim()
-            if (file[i].length > maxValue) maxValue = file[i].length
-        }
-        for (k in file.indices) {
-            val resultList = file[k].split(Regex("""\s+|\\n""")).toMutableList()
-            var spaces = maxValue - (file[k].length - Regex("""\s""").findAll(file[k]).count())
-            var j = 0
-            if (resultList.size > 1) {
-                while (spaces != 0) {
-                    if (j == resultList.lastIndex) {
-                        j = 0
-                        continue
-                    }
-                    resultList[j] = sb.append(resultList[j]).append(" ").toString()
-                    spaces--
-                    j++
-                    sb.clear()
+    if (file.isEmpty()) {
+        return
+    }
+    if (file[0].contains("\\n   ")) file = file[0].split("""\n""").toMutableList()
+    val linesCounter = file.size
+    for (i in file.indices) {
+        file[i] = file[i].trim()
+        if (file[i].length > maxValue) maxValue = file[i].length
+    }
+    for (k in file.indices) {
+        val resultList = file[k].split(Regex("""\s+|\\n""")).toMutableList()
+        var spaces = maxValue - (file[k].length - Regex("""\s""").findAll(file[k]).count())
+        var j = 0
+        if (resultList.size > 1) {
+            while (spaces != 0) {
+                if (j == resultList.lastIndex) {
+                    j = 0
+                    continue
                 }
+                resultList[j] = sb.append(resultList[j]).append(" ").toString()
+                spaces--
+                j++
+                sb.clear()
             }
-            writer.write(resultList.joinToString(separator = ""))
-            if (k != file.lastIndex) {
-                if (linesCounter == 1) writer.write("\\n")
-                else writer.write("\n")
-            }
+        }
+        writer.write(resultList.joinToString(separator = ""))
+        if (k != file.lastIndex) {
+            if (linesCounter == 1) writer.write("\\n")
+            else writer.write("\n")
         }
     }
-        writer.write("")
+    writer.write("")
     writer.close()
 }
 
