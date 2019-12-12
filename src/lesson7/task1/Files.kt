@@ -346,20 +346,21 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         "*" to false,
         "~~" to false
     )
+    val resultList = mutableListOf<String>()
     val writer = File(outputName).bufferedWriter()
-    writer.write("<html><body><p>")
+    resultList.add("<html><body><p>")
     var pTrigger = true
-    val lastIndex = File(inputName).readLines().lastIndex
     for (line in File(inputName).readLines()) {
-        if (line.isBlank() && File(inputName).readLines().indexOf(line) != lastIndex) {
+        if (line.isBlank() && resultList.last() != "<p>") {
             if (pTrigger) {
-                writer.write("</p>")
+                resultList.add("</p>")
                 pTrigger = false
             }
             if (!pTrigger) {
-                writer.write("<p>")
+                resultList.add("<p>")
                 pTrigger = true
             }
+
         }
         var i = 0
         while (i <= line.lastIndex) {
@@ -369,7 +370,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     symbol = line[i].toString() + line[i + 1].toString()
                     i += 2
                     val status = list.getValue(symbol)
-                    writer.write(toTag(symbol, status))
+                    resultList.add(toTag(symbol, status))
                     list[symbol] = !status
                     continue
                 }
@@ -378,16 +379,17 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 symbol = line[i].toString()
                 i++
             } else {
-                writer.write(symbol)
+                resultList.add(symbol)
                 i++
                 continue
             }
             val status = list.getValue(symbol)
-            writer.write(toTag(symbol, status))
+            resultList.add(toTag(symbol, status))
             list[symbol] = !status
         }
     }
-    writer.write("</p></body></html>")
+    resultList.add("</p></body></html>")
+    writer.write(resultList.joinToString(separator = ""))
     writer.close()
 }
 
