@@ -364,14 +364,17 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         var i = 0
         while (i <= line.lastIndex) {
             var symbol = line[i].toString()
-            if (i == line.lastIndex) {
-                writer.write(symbol)
-                break
+            if (i != line.lastIndex) {
+                if (list.contains(symbol + line[i + 1].toString())) {
+                    symbol = line[i].toString() + line[i + 1].toString()
+                    i += 2
+                    val status = list.getValue(symbol)
+                    writer.write(toTag(symbol, status))
+                    list[symbol] = !status
+                    continue
+                }
             }
-            if (list.contains(symbol + line[i + 1].toString())) {
-                symbol = line[i].toString() + line[i + 1].toString()
-                i += 2
-            } else if (list.contains(symbol)) {
+            if (list.contains(symbol)) {
                 symbol = line[i].toString()
                 i++
             } else {
