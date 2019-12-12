@@ -348,7 +348,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     )
     val resultList = mutableListOf<String>()
     val writer = File(outputName).bufferedWriter()
-    resultList.add("<html><body><p>")
+    resultList.add("<html>")
+    resultList.add("<body>")
+    resultList.add("<p>")
     var pTrigger = true
     for (line in File(inputName).readLines()) {
         if (line.isEmpty() && resultList.last() != "<p>") {
@@ -360,7 +362,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 resultList.add("<p>")
                 pTrigger = true
             }
-
         }
         var i = 0
         while (i <= line.lastIndex) {
@@ -502,6 +503,7 @@ fun toTag(symbols: String, status: Boolean): String {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
+    TODO()
 }
 
 /**
