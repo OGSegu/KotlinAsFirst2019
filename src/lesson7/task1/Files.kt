@@ -341,60 +341,58 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val charList = mutableMapOf<String, Boolean>(
+    val list = mutableMapOf(
         "**" to false,
         "*" to false,
         "~~" to false
     )
-    val file = File(inputName).readLines()
     val writer = File(outputName).bufferedWriter()
-    writer.write("<html><body>")
-    if (file.isNotEmpty()) {
-        writer.write("<p>")
-        for (line in file.indices) {
-            var i = 0
-            if (file[line].isEmpty() && line != file.lastIndex) writer.write("</p><p>")
-            else {
-                while (i <= file[line].lastIndex) {
-                    if (i == file[line].lastIndex) {
-                        writer.write(file[line][i].toString())
-                        i++
-                        continue
-                    }
-                    when {
-                        charList.containsKey(file[line][i].toString() + file[line][i + 1].toString()) -> {
-                            val key = file[line][i].toString() + file[line][i + 1].toString()
-                            val result = transformChar(key, charList.getValue(key))
-                            charList[key] = !charList[key]!!
-                            writer.write(result)
-                            i += 2
-                        }
-                        charList.containsKey(file[line][i].toString()) -> {
-                            val key = file[line][i].toString()
-                            val result = transformChar(key, charList.getValue(key))
-                            charList[key] = !charList[key]!!
-                            writer.write(result)
-                            i++
-                        }
-                        else -> {
-                            writer.write(file[line][i].toString())
-                            i++
-                        }
-                    }
-                }
+    writer.write("<html><body><p>")
+    var pTrigger = true
+    val lastIndex = File(inputName).readLines().lastIndex
+    for (line in File(inputName).readLines()) {
+        if (line.isBlank() && File(inputName).readLines().indexOf(line) != lastIndex) {
+            if (pTrigger) {
+                writer.write("</p>")
+                pTrigger = false
+            }
+            if (!pTrigger) {
+                writer.write("<p>")
+                pTrigger = true
             }
         }
-        writer.write("</p>")
+        var i = 0
+        while (i <= line.lastIndex) {
+            var symbol = line[i].toString()
+            if (i == line.lastIndex) {
+                writer.write(symbol)
+                break
+            }
+            if (list.contains(symbol + line[i + 1].toString())) {
+                symbol = line[i].toString() + line[i + 1].toString()
+                i += 2
+            } else if (list.contains(symbol)) {
+                symbol = line[i].toString()
+                i++
+            } else {
+                writer.write(symbol)
+                i++
+                continue
+            }
+            val status = list.getValue(symbol)
+            writer.write(toTag(symbol, status))
+            list[symbol] = !status
+        }
     }
-    writer.write("</body></html>")
+    writer.write("</p></body></html>")
     writer.close()
 }
 
-fun transformChar(char: String, triggerStatus: Boolean): String {
-    return when (char) {
-        "**" -> if (!triggerStatus) "<b>" else "</b>"
-        "*" -> if (!triggerStatus) "<i>" else "</i>"
-        "~~" -> if (!triggerStatus) "<s>" else "</s>"
+fun toTag(symbols: String, status: Boolean): String {
+    return when (symbols) {
+        "**" -> if (!status) "<b>" else "</b>"
+        "*" -> if (!status) "<i>" else "</i>"
+        "~~" -> if (!status) "<s>" else "</s>"
         else -> ""
     }
 }
