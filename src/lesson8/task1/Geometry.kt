@@ -3,10 +3,10 @@
 package lesson8.task1
 
 import lesson1.task1.sqr
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import java.lang.Double.MAX_VALUE
+import java.lang.Double.MIN_VALUE
+import java.lang.IllegalArgumentException
+import kotlin.math.*
 
 /**
  * Точка на плоскости
@@ -79,14 +79,17 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double = TODO()
+    fun distance(other: Circle): Double {
+        val length = sqrt(sqr(other.center.x - center.x) + sqr(other.center.y - center.y)) - (radius + other.radius)
+        return if (length < 0) 0.0 else length
+    }
 
     /**
      * Тривиальная
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean = sqr(p.x - center.x) + sqr(p.y - center.y) <= sqr(radius)
 }
 
 /**
@@ -106,7 +109,22 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment = TODO()
+fun diameter(vararg points: Point): Segment {
+    require(points.size >= 2)
+    var max = MIN_VALUE
+    val resultList = mutableListOf<Pair<Point, Point>>()
+    for (i in points.indices) {
+        for (j in points.indices) {
+            if (j == points.lastIndex) break
+            val length = sqrt(sqr(points[i].x - points[j + 1].x) + sqr(points[i].y - points[j + 1].y))
+            if (length > max) {
+                max = length
+                resultList.add(Pair(points[i], points[j + 1]))
+            }
+        }
+    }
+    return Segment(resultList.last().first, resultList.last().second)
+}
 
 /**
  * Простая
