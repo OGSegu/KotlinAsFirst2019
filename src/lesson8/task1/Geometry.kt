@@ -80,7 +80,7 @@ data class Circle(val center: Point, val radius: Double) {
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
     fun distance(other: Circle): Double {
-        val length = sqrt(sqr(other.center.x - center.x) + sqr(other.center.y - center.y)) - (radius + other.radius)
+        val length = center.distance(other.center) - (radius + other.radius)
         return if (length < 0) 0.0 else length
     }
 
@@ -112,18 +112,18 @@ data class Segment(val begin: Point, val end: Point) {
 fun diameter(vararg points: Point): Segment {
     require(points.size >= 2)
     var max = MIN_VALUE
-    val resultList = mutableListOf<Pair<Point, Point>>()
+    var resultPair = Pair(Point(0.0, 0.0), Point(0.0, 0.0))
     for (i in points.indices) {
         for (j in points.indices) {
             if (j == points.lastIndex) break
             val length = sqrt(sqr(points[i].x - points[j + 1].x) + sqr(points[i].y - points[j + 1].y))
             if (length > max) {
                 max = length
-                resultList.add(Pair(points[i], points[j + 1]))
+                resultPair = Pair(points[i], points[j + 1])
             }
         }
     }
-    return Segment(resultList.last().first, resultList.last().second)
+    return Segment(resultPair.first, resultPair.second)
 }
 
 /**
@@ -132,15 +132,19 @@ fun diameter(vararg points: Point): Segment {
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = TODO()
-
+fun circleByDiameter(diameter: Segment): Circle {
+    val circleX = (diameter.begin.x + diameter.end.x) / 2
+    val circleY = (diameter.begin.y + diameter.end.y) / 2
+    val radius = sqrt(sqr(circleX - diameter.end.x) + sqr(circleY - diameter.end.y))
+    return Circle(Point(circleX,circleY), radius)
+}
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
  * Уравнение прямой: (y - point.y) * cos(angle) = (x - point.x) * sin(angle)
  * или: y * cos(angle) = x * sin(angle) + b, где b = point.y * cos(angle) - point.x * sin(angle).
  * Угол наклона обязан находиться в диапазоне от 0 (включительно) до PI (исключительно).
  */
-class Line private constructor(val b: Double, val angle: Double) {
+class Line(val b: Double, val angle: Double) {
     init {
         require(angle >= 0 && angle < PI) { "Incorrect line angle: $angle" }
     }
@@ -168,17 +172,20 @@ class Line private constructor(val b: Double, val angle: Double) {
 
 /**
  * Средняя
- *
+ * где b = point.y * cos(angle) - point.x * sin(angle).
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line = TODO()
+fun lineBySegment(s: Segment): Line {
+    val angle = atan2(s.end.y - s.begin.y, s.end.x - s.begin.x)
+    return Line(s.end,angle)
+}
 
 /**
  * Средняя
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line = lineBySegment(Segment(a, b))
 
 /**
  * Сложная
