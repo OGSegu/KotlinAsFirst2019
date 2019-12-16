@@ -176,7 +176,7 @@ class Line(val b: Double, val angle: Double) {
  * Построить прямую по отрезку
  */
 fun lineBySegment(s: Segment): Line {
-    val angle = atan2(s.end.y - s.begin.y, s.end.x - s.begin.x)
+    val angle = (atan2(s.end.y - s.begin.y, s.end.x - s.begin.x) + PI) % PI
     return Line(s.end,angle)
 }
 
