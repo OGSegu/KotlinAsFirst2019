@@ -136,8 +136,9 @@ fun circleByDiameter(diameter: Segment): Circle {
     val circleX = (diameter.begin.x + diameter.end.x) / 2
     val circleY = (diameter.begin.y + diameter.end.y) / 2
     val radius = sqrt(sqr(circleX - diameter.end.x) + sqr(circleY - diameter.end.y))
-    return Circle(Point(circleX,circleY), radius)
+    return Circle(Point(circleX, circleY), radius)
 }
+
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
  * Уравнение прямой: (y - point.y) * cos(angle) = (x - point.x) * sin(angle)
@@ -177,7 +178,7 @@ class Line(val b: Double, val angle: Double) {
  */
 fun lineBySegment(s: Segment): Line {
     val angle = (atan2(s.end.y - s.begin.y, s.end.x - s.begin.x) + PI) % PI
-    return Line(s.end,angle)
+    return Line(s.end, angle)
 }
 
 /**
@@ -199,7 +200,7 @@ fun bisectorByPoints(a: Point, b: Point): Line {
 }
 
 fun angleByPoints(a: Point, b: Point): Double {
-    return (atan2(b.y - a.y,b.x - a.x) + PI) % PI
+    return (atan2(b.y - a.y, b.x - a.x) + PI) % PI
 }
 
 /**
